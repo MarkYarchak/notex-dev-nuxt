@@ -1,0 +1,51 @@
+{
+  "name": "coursework_nuxt",
+  "version": "1.0.0",
+  "description": "My luminous Nuxt.js project",
+  "author": "Mark Yarchak",
+  "private": true,
+  "scripts": {
+    "serve": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-brands-svg-icons": "^5.10.2",
+    "@fortawesome/free-regular-svg-icons": "^5.10.2",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
+    "@fortawesome/vue-fontawesome": "^0.1.7",
+    "@neneos/nuxt-animate.css": "0.0.1",
+    "@nuxtjs/apollo": "^4.0.0-rc12",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^3.0.0-0",
+    "apollo-server-express": "^2.9.3",
+    "bcryptjs": "^2.4.3",
+    "cross-env": "^5.2.0",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.3.0",
+    "eslint-loader": "^3.0.0",
+    "express": "^4.16.4",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.4",
+    "graphql-tag": "^2.10.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "mongoose": "^5.6.13",
+    "nuxt": "^2.0.0",
+    "nuxt-fontawesome": "^0.4.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-strategy": "^1.0.0",
+    "socket.io": "^2.2.0",
+    "vue-server-renderer": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.0.0",
+    "nodemon": "^1.18.9",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2"
+  }
+}
