@@ -1,10 +1,12 @@
 <template>
-  <div></div>
+  <div>
+    workspace
+  </div>
 </template>
 
 <script>
 export default {
-  name: "index"
+  name: "_id"
 };
 </script>
 

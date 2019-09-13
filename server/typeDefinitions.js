@@ -4,17 +4,19 @@ const typeDefs = gql`
 
   type Query {
     hello: String!
-    dogs: [Dog!]
+    users: [User!]!
   }
 
-  type Dog {
+  type User {
     id: ID!
-    name: String!
+    username: String!
+    fullName: String!
   }
   
   type Mutation {
-    createDog(name: String!): Dog!
-    deleteDog(name: String!): Dog!
+    createUser(username: String!, fullName: String!, password: String!): User!
+    updateUser(username: String!, fullName: String, password: String): User!
+    deleteUser(username: String!): User!
   }
   
 `;

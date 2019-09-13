@@ -1,20 +1,26 @@
 <template>
   <v-card
-    width="700"
-    class="mb-2 ml-1 mr-1"
+    :min-width="$vuetify.breakpoint.mdAndUp ? '700' : '600'"
+    :min-height="$vuetify.breakpoint.mdAndUp ? '600' : '500'"
+    class="mb-3 ml-1 mr-1"
   >
     <v-window v-model="postWindowPosition">
       <v-window-item :value="1">
-        <v-toolbar elevation="0">
+        <v-toolbar>
           <v-toolbar-title>
+            Edit public note
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-subheader>
-            {{ moment(moment().format()).fromNow() }}
-          </v-subheader>
+          <v-btn
+            text
+            color="orange darken-2"
+            @click="postWindowPosition = 2"
+          >
+            <font-awesome-icon :icon="['fas', 'arrow-right']" class="fa-lg" />
+          </v-btn>
         </v-toolbar>
         <v-card-title>
-          {{ dog.name }}
+          {{ user.username }}
         </v-card-title>
         <v-card-text>
           <v-list>
@@ -70,15 +76,20 @@
         <v-img
           src="https://source.unsplash.com/random"
           aspect-ratio="1"
-          height="300"
+          height="368"
           contain
         ></v-img>
         <v-card-title>
-          {{ dog.name }}
+          {{ user.fullName }}
         </v-card-title>
         <v-card-text>
           <div style="display: flex; flex-direction: column;">
-            <strong>Dog id:</strong> {{ dog.id }}
+            <div>
+              <strong>User id:</strong> {{ user.id }}
+            </div>
+            <div>
+              <strong>Username:</strong> {{ user.username }}
+            </div>
           </div>
         </v-card-text>
         <v-card-actions>
@@ -107,14 +118,14 @@
         </v-card-actions>
       </v-window-item>
 
-      <v-window-item style="min-height: 100%;" :value="3">
+      <v-window-item :value="3">
         <v-toolbar>
           <v-btn
-            outlined
+            text
             color="orange darken-2"
             @click="postWindowPosition = 2"
           >
-            Back
+            <font-awesome-icon :icon="['fas', 'arrow-left']" class="fa-lg" />
           </v-btn>
           <v-spacer></v-spacer>
           <v-subheader>
@@ -157,11 +168,12 @@ import moment from 'moment';
 export default {
   name: 'OnePostCard',
   props: {
-    dog: {
+    user: {
       type: Object,
       default: () => {},
     },
   },
+  apollo: {},
   data: () => ({
     moment,
     postWindowPosition: 2,
