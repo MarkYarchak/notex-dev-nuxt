@@ -2,21 +2,29 @@
   <v-layout
     justify-center
     align-center
+    wrap
   >
-<!--    wrap-->
-    <v-list>
       <OnePostCard
         v-for="(user, uid) in users"
         :key="uid"
         :user="user"
       />
-    </v-list>
   </v-layout>
 </template>
 
 <script>
 import gql from 'graphql-tag';
 import OnePostCard from '../../components/OnePostCard';
+
+const subscribe = `
+
+    subscription {
+      newUser {
+        username
+        fullName
+      }
+    }
+`;
 
 export default {
   layout: 'default',

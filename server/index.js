@@ -3,7 +3,7 @@ const consola = require('consola');
 const http = require('http');
 const express = require('express');
 const mongoose = require('mongoose');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, PubSub } = require('apollo-server-express');
 const { resolvers } = require('./resolvers');
 const { typeDefs } = require('./typeDefinitions');
 const databaseConfig = require('./config/database');
@@ -23,19 +23,11 @@ async function start () {
     console.log('Connected to database at', databaseConfig.database)
   })
   .catch(err => console.log(err));
+  const pubsub = new PubSub();
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    subscriptions: {
-      onConnect: (connectionParams, webSocket, context) => {
-        webSocket.send({ outputData: 'nice data', hah: 'okay status', randomNumber: 12423 }, (data) => {
-          console.log(data);
-        });
-      },
-      onDisconnect: (webSocket, context) => {
-        // console.log(context);
-      },
-    },
+    context: ({ req, res }) => ({ req, res, pubsub }),
   });
   server.applyMiddleware({ app });
 

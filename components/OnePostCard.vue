@@ -1,72 +1,16 @@
 <template>
   <v-card
-    :min-width="$vuetify.breakpoint.mdAndUp ? '700' : '600'"
-    :min-height="$vuetify.breakpoint.mdAndUp ? '600' : '500'"
+    :width="$vuetify.breakpoint.mdAndUp ? 700 : $vuetify.breakpoint.smOnly ? 620 : ''"
     class="mb-3 ml-1 mr-1"
   >
     <v-window v-model="postWindowPosition">
-      <v-window-item :value="1">
-        <v-toolbar>
-          <v-toolbar-title>
-            Edit public note
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            color="orange darken-2"
-            @click="postWindowPosition = 2"
-          >
-            <font-awesome-icon :icon="['fas', 'arrow-right']" class="fa-lg" />
-          </v-btn>
-        </v-toolbar>
-        <v-card-title>
-          {{ user.username }}
-        </v-card-title>
-        <v-card-text>
-          <v-list>
-            <v-list-item>
-              <v-list-item-title>
-                First text (title)
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                Second text (subtitle)
-              </v-list-item-subtitle>
-              <v-list-item-content>
-                This is the list item content section
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-list-item-action-text>
-                  And this section is the list item action text of list
-                </v-list-item-action-text>
-                <v-btn
-                  dark
-                  color="green darken-2"
-                >
-                  <font-awesome-icon :icon="['fas', 'edit']" class="fa-lg" />
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            dark
-            block
-            color="orange darken-2"
-            @click="postWindowPosition = 2"
-          >
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-window-item>
-
       <v-window-item :value="2">
-        <v-toolbar elevation="0">
-          <v-avatar size="50">
+        <v-toolbar elevation="0" style="padding: 15px 5px 20px 5px;">
+          <v-avatar size="64">
             <v-img src="https://source.unsplash.com/random"></v-img>
           </v-avatar>
           <v-toolbar-title>
-            <v-subheader>Mark Yarchak</v-subheader>
+            <span class="title-username-font">{{ user.username }}</span>
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-subheader>
@@ -76,7 +20,7 @@
         <v-img
           src="https://source.unsplash.com/random"
           aspect-ratio="1"
-          height="368"
+          max-height="368"
           contain
         ></v-img>
         <v-card-title>
@@ -87,19 +31,9 @@
             <div>
               <strong>User id:</strong> {{ user.id }}
             </div>
-            <div>
-              <strong>Username:</strong> {{ user.username }}
-            </div>
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            outlined
-            color="orange darken-2"
-            @click="postWindowPosition = 1"
-          >
-            Edit
-          </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             dark
@@ -110,48 +44,67 @@
           <v-spacer></v-spacer>
           <v-btn
             dark
+            :x-large="$vuetify.breakpoint.mdAndUp"
+            :large="$vuetify.breakpoint.smAndDown"
             color="blue"
             @click="postWindowPosition = 3"
           >
-            <font-awesome-icon :icon="['fas', 'paper-plane']" />
+            <font-awesome-icon :icon="['fas', 'comments']" />
           </v-btn>
         </v-card-actions>
       </v-window-item>
 
       <v-window-item :value="3">
-        <v-toolbar>
-          <v-btn
-            text
-            color="orange darken-2"
-            @click="postWindowPosition = 2"
-          >
-            <font-awesome-icon :icon="['fas', 'arrow-left']" class="fa-lg" />
-          </v-btn>
+        <v-toolbar elevation="0">
+          <v-toolbar-items>
+            <v-btn
+              text
+              color="orange darken-2"
+              @click="postWindowPosition = 2"
+            >
+              <font-awesome-icon :icon="['fas', 'arrow-left']" class="fa-lg" />
+            </v-btn>
+
+          </v-toolbar-items>
           <v-spacer></v-spacer>
-          <v-subheader>
-            {{ moment(moment().format()).fromNow() }}
-          </v-subheader>
+          <v-toolbar-items>
+            <v-btn
+              dark
+              color="blue darken-3"
+              @click="fullScreenComments = true"
+            >
+              Full screen
+            </v-btn>
+          </v-toolbar-items>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn
+              dark
+              color="blue darken-3"
+              @click="fullScreenComments = true"
+            >
+              Full screen
+            </v-btn>
+          </v-toolbar-items>
         </v-toolbar>
         <v-card-text>
-          <v-text-field
-            label="Password"
-            type="password"
-          ></v-text-field>
-          <v-text-field
-            label="Confirm Password"
-            type="password"
-          ></v-text-field>
-          <span class="caption grey--text text--darken-1">
-            Please enter a password for your account
-          </span>
+          <v-sheet
+            class="overflow-y-auto sheet-scroll"
+            max-height="410"
+          >
+            <v-container style="height: 1500px;">
+
+            </v-container>
+          </v-sheet>
         </v-card-text>
         <v-card-actions>
           <v-text-field
             label="Leave comment..."
+            class="pr-2 pl-1"
           ></v-text-field>
           <v-btn
-            outlined
-            color="blue darken-1"
+            dark
+            color="green"
             @click="postWindowPosition = 2"
           >
             Send
@@ -159,6 +112,54 @@
         </v-card-actions>
       </v-window-item>
     </v-window>
+    <v-dialog
+      v-model="fullScreenComments"
+      fullscreen
+    >
+      <v-card>
+        <v-toolbar elevation="0">
+          <v-toolbar-items>
+            <v-btn
+              text
+              color="orange darken-2"
+            >
+              <font-awesome-icon :icon="['fas', 'arrow-left']" class="fa-lg" />
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              dark
+              color="blue darken-3"
+              @click="fullScreenComments = false"
+            >
+              Small screen
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card-text>
+          <v-sheet
+            class="overflow-y-auto sheet-scroll"
+            max-height="420"
+          >
+            <v-container style="height: 1500px;">
+
+            </v-container>
+          </v-sheet>
+        </v-card-text>
+        <v-card-actions>
+          <v-text-field
+            label="Leave comment..."
+            class="pr-2 pl-1"
+          ></v-text-field>
+          <v-btn
+            dark
+            color="green"
+            @click="postWindowPosition = 2"
+          >
+            Send
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -177,10 +178,20 @@ export default {
   data: () => ({
     moment,
     postWindowPosition: 2,
+    fullScreenComments: false,
   }),
 };
 </script>
 
-<style scoped>
+<style
+  lang="stylus"
+  scoped>
+  @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 
+  .title-username-font
+    color: #525252
+    margin-left: 20px
+    font-family: 'Raleway', sans-serif;
+  .sheet-scroll::-webkit-scrollbar
+    /*display: none*/
 </style>
