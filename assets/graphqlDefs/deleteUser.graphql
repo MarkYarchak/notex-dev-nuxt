@@ -1,0 +1,5 @@
+mutation {
+  deleteUser (username: "mark777") {
+    username
+  }
+}

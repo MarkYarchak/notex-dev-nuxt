@@ -1,0 +1,5 @@
+mutation {
+  updateUser (username: "goodperson", email: "goodperson@gmail.com") {
+    username
+  }
+}
