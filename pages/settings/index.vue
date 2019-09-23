@@ -10,6 +10,13 @@
       >
         <font-awesome-icon :icon="['fas', 'sign-in-alt']" class="fa-lg"/>
       </v-btn>
+      <v-switch
+        v-model="isBottomMenu"
+        label="Mobile bottom menu"
+        class="lg-brake"
+        color="orange darken-2"
+        @change="changeBottomMenuPosition"
+      ></v-switch>
     </v-container>
     <v-dialog
       v-model="logOutDialog"
@@ -49,12 +56,25 @@ export default {
   name: "index",
   data() {
     return {
+      isBottomMenu: this.$store.state.appSettings.isBottomMenu,
       logOutDialog: false,
     };
+  },
+  methods: {
+    changeBottomMenuPosition() {
+      this.$store.dispatch('appSettings/bottomMenuPosition');
+    },
   },
 };
 </script>
 
-<style scoped>
+<style
+  lang="stylus"
+  scoped>
 
+@media (min-width: 1264px) {
+  .lg-brake {
+    display: none
+  }
+}
 </style>

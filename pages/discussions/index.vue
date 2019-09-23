@@ -1,44 +1,105 @@
 <template>
-  <div>
-    <v-card
-      class="d-none_large"
-      color="grey lighten-3"
-    >
-      <v-layout
-        wrap
-      >
-        <div class="mb-3">
-          <v-text-field
-            placeholder="Search discussion"
-            solo
-            prepend-inner-icon="search"
-            hide-details
-            clearable
-            :loading="searchLoading"
-          ></v-text-field>
-        </div>
-        <v-expansion-panels accordion>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Parameters</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <div style="display: flex; flex-wrap: wrap">
-                <div
-                  v-for="(parameter, pi) in parametersArr"
-                  :key="pi"
-                  style="width: 125px;"
-                >
-                  <v-checkbox
-                    v-model="parameter.checkPosition"
-                    :label="parameter.label"
-                    color="green"
-                  ></v-checkbox>
-                </div>
-              </div>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-layout>
-    </v-card>
+  <div class="pt-1 pb-1">
+    <div>
+<!--      <v-card-->
+<!--        class="d-none_large"-->
+<!--        color="grey lighten-3"-->
+<!--      >-->
+<!--        <v-layout-->
+<!--          wrap-->
+<!--        >-->
+<!--          <div class="mb-3">-->
+<!--            <v-text-field-->
+<!--              placeholder="Search discussion"-->
+<!--              solo-->
+<!--              prepend-inner-icon="search"-->
+<!--              hide-details-->
+<!--              clearable-->
+<!--              :loading="searchLoading"-->
+<!--            ></v-text-field>-->
+<!--          </div>-->
+<!--          <v-expansion-panels accordion>-->
+<!--            <v-expansion-panel>-->
+<!--              <v-expansion-panel-header>Parameters</v-expansion-panel-header>-->
+<!--              <v-expansion-panel-content>-->
+<!--                <div style="display: flex; flex-wrap: wrap">-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="dense"-->
+<!--                      label="Dense"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="searchLoading"-->
+<!--                      label="Loading"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="threeLine"-->
+<!--                      label="Three line"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="shaped"-->
+<!--                      label="Shaped"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="flat"-->
+<!--                      label="Flat"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="subheader"-->
+<!--                      label="Subheader"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="inactive"-->
+<!--                      label="Inactive"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="subGroup"-->
+<!--                      label="Sub group"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="nav"-->
+<!--                      label="Nav"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                  <div style="width: 125px;">-->
+<!--                    <v-checkbox-->
+<!--                      v-model="rounded"-->
+<!--                      label="Rounded"-->
+<!--                      color="green"-->
+<!--                    ></v-checkbox>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </v-expansion-panel-content>-->
+<!--            </v-expansion-panel>-->
+<!--          </v-expansion-panels>-->
+<!--        </v-layout>-->
+<!--      </v-card>-->
+    </div>
 
     <div
       style="margin: 0 auto;"
@@ -68,7 +129,17 @@
             avatar
             :rounded="rounded"
           >
-            <v-subheader>All discussions</v-subheader>
+            <v-row class="pl-4 pr-5">
+              <v-subheader>All discussions</v-subheader>
+              <v-spacer></v-spacer>
+              <v-btn
+                icon
+                :large="true"
+                @click="addDiscussionDialog = true"
+              >
+                <v-icon>add</v-icon>
+              </v-btn>
+            </v-row>
             <template v-if="items.length">
               <v-list-item-group
                 v-model="item"
@@ -110,10 +181,11 @@
         </v-card>
         <div class="text-center pt-3 pb-3">
           <v-pagination
+            v-if="items.length > 15"
             v-model="page"
             :length="15"
             color="blue"
-            :total-visible="7"
+            :total-visible="$vuetify.breakpoint.smAndDown ? 5 : 7"
             circle
           ></v-pagination>
         </div>
@@ -139,15 +211,105 @@
         <v-card-title>Parameters</v-card-title>
         <div style="padding: 12px 10px 10px 25px;">
           <v-checkbox
-            v-for="(parameter, pi) in parametersArr"
-            :key="pi"
-            v-model="parameter.checkPosition"
-            :label="parameter.label"
+            v-model="dense"
+            label="Dense"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="searchLoading"
+            label="Loading"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="threeLine"
+            label="Three line"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="shaped"
+            label="Shaped"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="flat"
+            label="Flat"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="subheader"
+            label="Subheader"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="inactive"
+            label="Inactive"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="subGroup"
+            label="Sub group"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="nav"
+            label="Nav"
+            color="green"
+          ></v-checkbox>
+          <v-checkbox
+            v-model="rounded"
+            label="Rounded"
             color="green"
           ></v-checkbox>
         </div>
       </v-card>
     </div>
+    <v-dialog
+      v-model="addDiscussionDialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title>
+          <v-toolbar-title>Add new discussion</v-toolbar-title>
+        </v-card-title>
+        <v-card-text>
+          <v-switch
+            v-model="newDiscussion.manyPeople"
+            color="blue darken-1"
+            label="Many people discussion"
+          ></v-switch>
+          <v-checkbox
+            v-if="newDiscussion.manyPeople"
+            v-model="newDiscussion.isPrivate"
+            label="Private discussion (invite by link only)"
+            color="blue darken-1"
+          ></v-checkbox>
+          <div style="display: flex; align-items: center;">
+            <v-switch
+              label="One to one communication"
+              hide-details
+              color="blue darken-1"
+            ></v-switch>
+             <strong style="color: #0000ab; margin: 3px 0 0 3px;">(beta)</strong>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            text
+            color="blue darken-1"
+            @click="addDiscussionDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            dark
+            color="blue darken-1"
+          >
+            Create
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -170,48 +332,6 @@ export default {
       subGroup: false,
       nav: false,
       rounded: false,
-      parametersArr: [
-        {
-          label: 'Dense',
-          checkPosition: this.dense,
-        },
-        {
-          label: 'Loading',
-          checkPosition: this.searchLoading,
-        },
-        {
-          label: 'Three line',
-          checkPosition: this.threeLine,
-        },
-        {
-          label: 'Shaped',
-          checkPosition: this.shaped,
-        },
-        {
-          label: 'Flat',
-          checkPosition: this.flat,
-        },
-        {
-          label: 'Subheader',
-          checkPosition: this.subheader,
-        },
-        {
-          label: 'Inactive',
-          checkPosition: this.inactive,
-        },
-        {
-          label: 'Sub group',
-          checkPosition: this.subGroup,
-        },
-        {
-          label: 'Nav',
-          checkPosition: this.nav,
-        },
-        {
-          label: 'Rounded',
-          checkPosition: this.rounded,
-        },
-      ],
       itemsFake: [
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
@@ -288,13 +408,25 @@ export default {
           title: 'Recipe to try',
           subtitle: "We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
         },
+        {
+          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+          title: 'Oui oui',
+          subtitle: "Do you have Paris recommendations? Have you ever been?",
+        },
       ],
       copyItems: null,
+      addDiscussionDialog: false,
+      newDiscussion: {
+        manyPeople: false,
+        isPrivate: false,
+      },
     };
   },
   computed: {
     items() {
-      return this.copyItems.filter((dio) => dio.title.toLowerCase().search(this.searchDiscussionField.toLowerCase()) > -1);
+      return this.searchDiscussionField ? this.copyItems
+        .filter((dio) => dio.title.toLowerCase().search(this.searchDiscussionField
+          .toLowerCase()) > -1) : this.copyItems;
     },
   },
   created() {
@@ -311,6 +443,10 @@ export default {
 <style
   lang="stylus"
   scoped>
+
+  .v-input--selection-controls.v-input {
+    margin: 0
+  }
 
 @media (min-width: 1100px) {
   .center_large {

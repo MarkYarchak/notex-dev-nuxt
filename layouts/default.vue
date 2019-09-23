@@ -5,7 +5,7 @@
         <v-navigation-drawer
           v-model="drawer"
           clipped
-          bottom
+          :bottom="bottomMenu"
           fixed
           dark
           color="grey darken-4"
@@ -28,14 +28,12 @@
                   <v-list-item-subtitle>@markyarchak</v-list-item-subtitle>
                 </v-list-item-content>
 <!--                <v-list-item-action>-->
-<!--                  <v-icon>mdi-menu-right</v-icon>-->
+<!--                  <v-icon>menu-right</v-icon>-->
 <!--                </v-list-item-action>-->
               </v-list-item>
             </v-list>
           </template>
-
           <v-divider></v-divider>
-
           <v-list
             nav
             dense
@@ -49,6 +47,9 @@
               color="orange"
             >
               <v-list-item-action>
+<!--                <span v-if="item.title === 'People'">-->
+<!--                  <font-awesome-icon :icon="['fas', 'users']" />-->
+<!--                </span>-->
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-action>
               <v-list-item-content>
@@ -66,26 +67,57 @@
           app
         >
           <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-          <v-toolbar-title>
+          <v-toolbar-title v-if="!fullSizeSearch">
             <span class="main-text">{{ title }}</span>
           </v-toolbar-title>
           <v-spacer />
           <v-text-field
+            ref="mainSearch"
             v-model="mainSearch"
-            placeholder="Search anything"
+            placeholder="Search anything..."
             solo
             prepend-inner-icon="search"
             hide-details
             clearable
             light
+            class="top-main-search sm-break"
+            :class="{'top-full-main-search': fullSizeSearch}"
             :loading="searchLoading"
+            @blur="fullSizeSearch = false"
+            @keypress.enter="startMainSearch"
           ></v-text-field>
+          <span
+            class="sm-add"
+            :style="fullSizeSearch ? 'min-width: 87%;' : ''"
+          >
+            <v-text-field
+              v-if="fullSizeSearch"
+              ref="mobileMainSearch"
+              v-model="mainSearch"
+              placeholder="Search anything..."
+              style="min-width: 100%;"
+              solo
+              prepend-inner-icon="search"
+              hide-details
+              clearable
+              light
+              :loading="searchLoading"
+              @blur="fullSizeSearch = false"
+              @keypress.enter="startMainSearch"
+            ></v-text-field>
+            <v-btn
+              v-if="!fullSizeSearch"
+              rounded
+              color="grey darken-4"
+              @click="focusMobileSearch()"
+            >
+              <v-icon>search</v-icon>
+            </v-btn>
+          </span>
           <div class="free-space-2"></div>
         </v-app-bar>
         <v-content style="background-color: #fff;">
-          <v-container>
-            <nuxt />
-          </v-container>
+          <nuxt />
         </v-content>
       </v-app>
     </transition>
@@ -102,37 +134,49 @@ export default {
   // middleware: ['authUser'],
   data () {
     return {
+      isMobile: this.$vuetify.breakpoint.smAndDown,
       mainSearch: '',
+      fullSizeSearch: false,
       searchLoading: false,
       drawer: this.$vuetify.breakpoint.lgAndUp,
       items: [
         {
-          icon: 'mdi-briefcase',
+          icon: 'work',
           title: 'Workspaces',
           to: '/workspaces'
         },
         {
-          icon: 'mdi-account-multiple',
+          icon: 'group',
           title: 'Collaborators',
           to: '/collaborators'
         },
         {
-          icon: 'mdi-forum',
+          icon: 'note',
+          title: 'Notes',
+          to: '/notes'
+        },
+        {
+          icon: 'forum',
           title: 'Discussions',
           to: '/discussions'
         },
         {
-          icon: 'mdi-account-group',
+          icon: 'group_work',
           title: 'Organizations',
           to: '/organizations'
         },
         {
-          icon: 'mdi-file-document-box',
+          icon: 'view_day',
           title: 'Publications',
           to: '/publications'
         },
         {
-          icon: 'mdi-settings',
+          icon: 'accessibility', // accessible_forward
+          title: 'People',
+          to: '/people'
+        },
+        {
+          icon: 'settings',
           title: 'Settings',
           to: '/settings'
         },
@@ -142,7 +186,20 @@ export default {
   },
   computed: {
     searchOverlay() {
-      return !!this.mainSearch;
+      return !!this.mainSearch && this.isMobile ? this.fullSizeSearch : false;
+    },
+    bottomMenu() {
+      return this.$store.state.appSettings.isBottomMenu;
+    },
+  },
+  methods: {
+    startMainSearch() {
+      this.$router.push('/');
+      this.$refs.mainSearch.blur();
+    },
+    focusMobileSearch() {
+      this.fullSizeSearch = true;
+      setTimeout(() => this.$refs.mobileMainSearch.focus(), 0);
     },
   },
 };
@@ -158,10 +215,27 @@ export default {
     font-weight: bold
   .free-space-2
     flex-grow: 2;
-
-@media (max-width: 1000px) {
+  .top-full-main-search
+    max-width none
+    min-width 87%
+  .sm-break
+    display: block!important
+  .sm-add
+    display: none!important
+@media (max-width: 960px) {
   .free-space-2 {
     display: none
+  }
+}
+@media (max-width: 600px) {
+  .top-main-search {
+    max-width 48px
+  }
+  .sm-break {
+    display: none!important
+  }
+  .sm-add {
+    display: block!important
   }
 }
 </style>

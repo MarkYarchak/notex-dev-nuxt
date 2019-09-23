@@ -7,11 +7,11 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    titleTemplate: 'Notex.cloud' || '%s - ' + process.env.npm_package_name,
+    title: 'Notex.cloud' || process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
@@ -22,7 +22,7 @@ module.exports = {
   ** Customize the progress-bar color
   */
   loading: {
-    color: '#0900ff',
+    color: '#040090',
   },
   /*
   ** Global CSS
@@ -119,6 +119,10 @@ module.exports = {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
+    defaultAssets: {
+      font: true,
+      icons: 'md',
+    },
     customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: false,

@@ -4,11 +4,11 @@
     align-center
     wrap
   >
-      <OnePostCard
-        v-for="(user, uid) in users"
-        :key="uid"
-        :user="user"
-      />
+    <OnePostCard
+      v-for="(user, uid) in users"
+      :key="uid"
+      :user="user"
+    />
   </v-layout>
 </template>
 

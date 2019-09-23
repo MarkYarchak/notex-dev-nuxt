@@ -1,11 +1,11 @@
 {
-  "name": "coursework_nuxt",
+  "name": "notex.cloud",
   "version": "1.0.0",
   "description": "My luminous Nuxt.js project",
   "author": "Mark Yarchak",
   "private": true,
   "scripts": {
-    "serve": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "serve": "cross-env NUXT_HOST=192.168.43.234 NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate"
@@ -44,6 +44,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "devDependencies": {
+    "@mdi/font": "^4.4.95",
     "@nuxtjs/vuetify": "^1.0.0",
     "nodemon": "^1.18.9",
     "stylus": "^0.54.7",

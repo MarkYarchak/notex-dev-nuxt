@@ -24,7 +24,10 @@
               color="blue"
               large
             >
-              <v-icon>mdi-account-edit</v-icon>
+              <font-awesome-icon
+                :icon="['fas', 'user-edit']"
+                style="font-size: 23px;"
+              />
             </v-btn>
           </v-card-actions>
         </v-row>
