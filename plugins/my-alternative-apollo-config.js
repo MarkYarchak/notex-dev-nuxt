@@ -1,6 +1,8 @@
-export default function(context){
+import { clientConfig } from '../nuxtClientConfig';
+
+export default function(context) {
   return {
-    httpEndpoint: 'http://192.168.43.234:3000/graphql',
+    httpEndpoint: `http://${clientConfig.httpHost}:${clientConfig.port}/graphql`,
     getAuth:() => 'Bearer my-static-token' // use this method to overwrite functions
   }
 }

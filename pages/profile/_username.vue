@@ -55,8 +55,8 @@
 
 <script>
 // import gql from 'graphql-tag';
-import { serverConfig } from '../../nuxtServerConfig';
-const graphqlPath = `${serverConfig.httpHost}:${serverConfig.port}/graphql`;
+import { clientConfig } from '../../nuxtClientConfig';
+const graphqlPath = `${clientConfig.httpHost}:${clientConfig.port}/graphql`;
 
 export default {
   name: "_username",

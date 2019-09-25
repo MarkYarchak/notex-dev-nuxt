@@ -157,7 +157,7 @@ export default {
     },
   },
   mounted() {
-    this.$vuetify.goTo(document.getElementById('messages-container').offsetHeight, {
+    this.$vuetify.goTo(document.getElementById('messages-container').offsetHeight + 1000, {
       container: ".scrolling-messages_container",
       duration: 0,
     });
