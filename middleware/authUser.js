@@ -5,7 +5,7 @@ export default async ({ redirect, route, $axios }) => {
     const response = await $axios.post(`${clientConfig.httpHost}:${clientConfig.port}/graphql`, {
       query: `{ profileUser (username: ${route.params.username}) { id, username, fullName } }`,
     });
-    if (!response.data.data.length) return redirect('/login');
+    if (!response.data.data) return redirect('/login');
   } catch (e) {
     console.log(e);
   }

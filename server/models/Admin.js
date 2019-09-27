@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const User = mongoose.plugin(uniqueValidator).model('User', {
+const Admin = mongoose.plugin(uniqueValidator).model('Admin', {
   username: {
     type: String,
     required: true,
     unique: true,
-    maxlength: 32,
   },
   email: {
     type: String,
@@ -23,23 +22,10 @@ const User = mongoose.plugin(uniqueValidator).model('User', {
   password: {
     type: String,
     required: true,
-    minlength: 8,
-  },
-  collaborators: {
-    type: Array,
-  },
-  notes: {
-    type: Array,
-  },
-  discussions: {
-    type: Array,
-  },
-  organizations: {
-    type: Array,
   },
   settings: {
     type: Object,
   },
 });
 
-module.exports.User = User;
+module.exports.Admin = Admin;

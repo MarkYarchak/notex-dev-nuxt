@@ -3,6 +3,7 @@ const consola = require('consola');
 const http = require('http');
 const express = require('express');
 const mongoose = require('mongoose');
+const passport = require("passport");
 const { ApolloServer, PubSub } = require('apollo-server-express');
 const { resolvers } = require('./resolvers');
 const { typeDefs } = require('./typeDefinitions');
@@ -18,7 +19,7 @@ async function start () {
   // Init Nuxt.js
   const nuxt = new Nuxt(config);
 
-  await mongoose.connect(databaseConfig.database, { useNewUrlParser: true, useCreateIndex: true })
+  await mongoose.connect(databaseConfig.database, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
   .then(() => {
     console.log('Connected to database at', databaseConfig.database)
   })
@@ -46,6 +47,8 @@ async function start () {
 
   // Give nuxt middleware to express
   app.use(nuxt.render);
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // const io = require('socket.io')(httpServer);
   // io.on('connection', () => { /* … */ });

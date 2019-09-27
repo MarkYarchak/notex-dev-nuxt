@@ -65,14 +65,14 @@ export default {
     const availableUser = await $axios.post(graphqlPath, {
       query: `{ profileUser (username: "${params.username}") { id, username }}`
     });
-    return availableUser.data.data.profileUser.length;
+    return availableUser.data.data.profileUser;
   },
   async asyncData({ params, $axios }) {
     const currentProfileData = await $axios.post(graphqlPath, {
       query: `{ profileUser (username: "${params.username}") { id, username, email, fullName }}`
     });
     return {
-      profileData: currentProfileData.data.data.profileUser[0],
+      profileData: currentProfileData.data.data.profileUser,
     };
   },
   apollo: {
