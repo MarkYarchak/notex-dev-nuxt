@@ -1,4 +1,4 @@
-const { serverConfig } = require('./nuxtServerConfig.js');
+const { fullHttpUrl, fullWsUrl } = require('./nuxtServerConfig.js');
 const colors = require('vuetify/es5/util/colors').default;
 
 module.exports = {
@@ -87,7 +87,7 @@ module.exports = {
     clientConfigs: {
       default: {
         // required
-        httpEndpoint: `${serverConfig.httpHost}:${serverConfig.port}/graphql`,
+        httpEndpoint: fullHttpUrl,
         // optional
         // See https://www.apollographql.com/docs/link/links/http.html#options
         httpLinkOptions: {
@@ -95,13 +95,13 @@ module.exports = {
         },
         // You can use `wss` for secure connection (recommended in production)
         // Use `null` to disable subscriptions
-        wsEndpoint: `${serverConfig.wsHost}:${serverConfig.port}/graphql`, // optional
+        wsEndpoint: fullWsUrl, // optional
         // LocalStorage token
         tokenName: 'apollo-token', // optional
       },
       test: {
-        httpEndpoint: `${serverConfig.httpHost}:${serverConfig.port}/graphql`,
-        wsEndpoint: `${serverConfig.wsHost}:${serverConfig.port}/graphql`,
+        httpEndpoint: fullHttpUrl,
+        wsEndpoint: fullWsUrl,
         tokenName: 'apollo-token'
       },
       // alternative: user path to config which returns exact same config options

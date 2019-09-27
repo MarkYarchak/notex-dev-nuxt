@@ -6,19 +6,23 @@
     <div class="image-background-block">
       <div class="login-container">
         <div class="login-form">
-          <v-form>
+          <v-form @submit.prevent="loginByUser">
             <v-card
-              width="300"
+              width="310"
               class="pt-1"
             >
               <v-card-title>Login</v-card-title>
               <v-card-text class="pt-3">
                 <v-text-field
+                  v-model="username"
                   outlined
-                  label="Email"
+                  type="text"
+                  label="Username"
                 ></v-text-field>
                 <v-text-field
+                  v-model="password"
                   outlined
+                  type="password"
                   label="Password"
                 ></v-text-field>
               </v-card-text>
@@ -28,6 +32,7 @@
                   dark
                   color="blue"
                   large
+                  @click="loginByUser"
                 >
                   Start
                 </v-btn>
@@ -43,10 +48,32 @@
 
 <script>
 import gql from 'graphql-tag';
+import { fullHttpUrl } from '../nuxtClientConfig';
 
 export default {
   name: "login",
   layout: 'login',
+  data() {
+    return {
+      username: '',
+      password: '',
+    };
+  },
+  methods: {
+    loginByUser() {
+      this.$axios.post(fullHttpUrl, {
+        query: `{ userLogin (username: "${this.username}", password: "${this.password}") { id, username, fullName, email } }`,
+      })
+        .then((data) => {
+          const userData = data.data.data.userLogin;
+          console.log(userData);
+          this.$router.push(`/profile/${userData.username}`);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+  },
 };
 </script>
 

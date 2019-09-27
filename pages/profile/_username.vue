@@ -55,20 +55,19 @@
 
 <script>
 // import gql from 'graphql-tag';
-import { clientConfig } from '../../nuxtClientConfig';
-const graphqlPath = `${clientConfig.httpHost}:${clientConfig.port}/graphql`;
+import { fullHttpUrl } from '../../nuxtClientConfig';
 
 export default {
   name: "_username",
   layout: 'default',
   async validate ({params, $axios}) {
-    const availableUser = await $axios.post(graphqlPath, {
+    const availableUser = await $axios.post(fullHttpUrl, {
       query: `{ profileUser (username: "${params.username}") { id, username }}`
     });
     return availableUser.data.data.profileUser;
   },
   async asyncData({ params, $axios }) {
-    const currentProfileData = await $axios.post(graphqlPath, {
+    const currentProfileData = await $axios.post(fullHttpUrl, {
       query: `{ profileUser (username: "${params.username}") { id, username, email, fullName }}`
     });
     return {
