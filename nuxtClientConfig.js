@@ -1,9 +1,11 @@
+import { serverConfig } from './nuxtServerConfig';
+
 export const clientConfig = {
-  httpHost: `http://${process.env.NUXT_HOST || 'localhost'}`,
-  wsHost: `ws://${process.env.NUXT_HOST || 'localhost'}`,
-  port: process.env.NUXT_PORT || '3000',
-  endpoint: 'graphql',
+  httpHost: serverConfig.httpHost,
+  wsHost: serverConfig.wsHost,
+  port: serverConfig.port,
+  endpoint: serverConfig.endpoint,
 };
 
-export const fullHttpUrl = `${clientConfig.httpHost}:${clientConfig.port}/${clientConfig.endpoint}`;
-export const fullWsUrl = `${clientConfig.wsHost}:${clientConfig.port}/${clientConfig.endpoint}`;
+export const gqlHttpUrl = `${clientConfig.httpHost}:${clientConfig.port}/${clientConfig.endpoint}`;
+export const gqlWsUrl = `${clientConfig.wsHost}:${clientConfig.port}/${clientConfig.endpoint}`;

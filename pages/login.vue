@@ -48,7 +48,7 @@
 
 <script>
 import gql from 'graphql-tag';
-import { fullHttpUrl } from '../nuxtClientConfig';
+import { gqlHttpUrl } from '../nuxtClientConfig';
 
 export default {
   name: "login",
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     loginByUser() {
-      this.$axios.post(fullHttpUrl, {
+      this.$axios.post(gqlHttpUrl, {
         query: `{ userLogin (username: "${this.username}", password: "${this.password}") { id, username, fullName, email } }`,
       })
         .then((data) => {

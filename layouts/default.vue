@@ -116,8 +116,14 @@
           </span>
           <div class="free-space-2"></div>
         </v-app-bar>
-        <v-content style="background-color: #fff;">
+        <v-content
+          v-if="isOnline"
+          style="background-color: #fff;"
+        >
           <nuxt />
+        </v-content>
+        <v-content v-else>
+          <p>You can't use this application offline, please check your connection and try again</p>
         </v-content>
       </v-app>
     </transition>
@@ -185,6 +191,9 @@ export default {
     };
   },
   computed: {
+    isOnline() {
+      return this.$nuxt.isOnline;
+    },
     searchOverlay() {
       return !!this.mainSearch && this.isMobile ? this.fullSizeSearch : false;
     },

@@ -10,7 +10,7 @@
           height="400"
         ></video>
       </div>
-      <div>
+      <div style="display: flex;">
         <v-switch
           v-model="iframeAllow"
           label="Add iframe"
@@ -18,12 +18,23 @@
         ></v-switch>
         <iframe
           v-if="iframeAllow"
-          src=""
+          src="https://youtu.be/M1qDPtyrwrw"
           allowfullscreen
           allow="camera;microphone"
           height="500"
           width="350"
         ></iframe>
+        <iframe
+          width="560"
+          height="315"
+          :src="`https://www.youtube.com/embed/${ytVideoId}`"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+        <v-text-field
+          v-model="ytVideoId"
+          label="Video ID"
+        ></v-text-field>
       </div>
     </div>
     <hr class="mt-2 mb-2">
@@ -72,6 +83,7 @@ export default {
       iframeAllow: false,
       allowVideo: false,
       allowAudio: false,
+      ytVideoId: 'M1qDPtyrwrw',
     };
   },
   methods: {

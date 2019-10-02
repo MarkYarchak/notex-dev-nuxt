@@ -107,9 +107,9 @@
     >
       <v-card
         max-width="1000"
-        :width="$vuetify.breakpoint.lgAndUp ? '1000' : ''"
+        :width="largeWidth1000"
         elevation="0"
-        :class="$vuetify.breakpoint.mdOnly ? 'ml-3' : ''"
+        :class="middleMargin3"
       >
         <v-card
           class="mx-auto"
@@ -185,7 +185,7 @@
             v-model="page"
             :length="15"
             color="blue"
-            :total-visible="$vuetify.breakpoint.smAndDown ? 5 : 7"
+            :total-visible="smallFiveOrSeven"
             circle
           ></v-pagination>
         </div>
@@ -267,55 +267,21 @@
       v-model="addDiscussionDialog"
       width="500"
     >
-      <v-card>
-        <v-card-title>
-          <v-toolbar-title>Add new discussion</v-toolbar-title>
-        </v-card-title>
-        <v-card-text>
-          <v-switch
-            v-model="newDiscussion.manyPeople"
-            color="blue darken-1"
-            label="Many people discussion"
-          ></v-switch>
-          <v-checkbox
-            v-if="newDiscussion.manyPeople"
-            v-model="newDiscussion.isPrivate"
-            label="Private discussion (invite by link only)"
-            color="blue darken-1"
-          ></v-checkbox>
-          <div style="display: flex; align-items: center;">
-            <v-switch
-              label="One to one communication"
-              hide-details
-              color="blue darken-1"
-            ></v-switch>
-             <strong style="color: #0000ab; margin: 3px 0 0 3px;">(beta)</strong>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            text
-            color="blue darken-1"
-            @click="addDiscussionDialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            dark
-            color="blue darken-1"
-          >
-            Create
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+     <CardCreateNewDiscussion
+      @close-create-dialog="addDiscussionDialog = false"
+     />
     </v-dialog>
   </div>
 </template>
 
 <script>
+import CardCreateNewDiscussion from '../../components/CardCreateNewDiscussion';
+
 export default {
   name: "index",
+  components: {
+    CardCreateNewDiscussion,
+  },
   data() {
     return {
       page: 1,
@@ -416,10 +382,6 @@ export default {
       ],
       copyItems: null,
       addDiscussionDialog: false,
-      newDiscussion: {
-        manyPeople: false,
-        isPrivate: false,
-      },
     };
   },
   computed: {
@@ -427,6 +389,15 @@ export default {
       return this.searchDiscussionField ? this.copyItems
         .filter((dio) => dio.title.toLowerCase().search(this.searchDiscussionField
           .toLowerCase()) > -1) : this.copyItems;
+    },
+    smallFiveOrSeven() {
+      return this.$vuetify.breakpoint.smAndDown ? 5 : 7;
+    },
+    largeWidth1000() {
+      return this.$vuetify.breakpoint.lgAndUp ? '1000' : '';
+    },
+    middleMargin3() {
+      return this.$vuetify.breakpoint.mdOnly ? 'ml-3' : '';
     },
   },
   created() {

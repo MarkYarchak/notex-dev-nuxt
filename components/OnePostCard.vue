@@ -19,9 +19,11 @@
         </v-toolbar>
         <v-img
           src="https://source.unsplash.com/random"
+          :lazy-src="require('../static/icon.png')"
           aspect-ratio="1"
           max-height="368"
           contain
+          @load="onLoadImage"
         ></v-img>
         <v-card-title>
           {{ user.fullName }}
@@ -180,6 +182,11 @@ export default {
     postWindowPosition: 2,
     fullScreenComments: false,
   }),
+  methods: {
+    onLoadImage(data) {
+      // console.log(data)
+    },
+  },
 };
 </script>
 

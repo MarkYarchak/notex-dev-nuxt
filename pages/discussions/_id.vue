@@ -1,6 +1,10 @@
 <template>
-  <div>
+  <v-card
+    elevation="0"
+    v-resize="onScreenResize"
+  >
     <v-toolbar
+      id="messages_toolbar"
       dense
       class="pb-2 pt-2"
     >
@@ -16,27 +20,13 @@
         /><span class="sm-break">discussions</span>
       </v-btn>
       <v-spacer></v-spacer>
-<!--      <v-text-field-->
-<!--        v-model="messageNum"-->
-<!--        label="Search message"-->
-<!--        hide-details-->
-<!--        single-line-->
-<!--        prepend-inner-icon="search"-->
-<!--        class="ml-2 mr-2"-->
-<!--        :suffix="foundMessages"-->
-<!--      ></v-text-field>-->
       <div><b>{{ params.id }}</b></div>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-<!--        <v-btn-->
-<!--          color="accent"-->
-<!--          @click="$vuetify.goTo(`#message${messageNum}`, { container: '.scrolling-messages_container' })"-->
-<!--        >-->
-<!--          saved position-->
-<!--        </v-btn>-->
       </v-toolbar-items>
       <v-btn
         dark
+        icon
         color="green darken-1"
         class="sm-low"
         @click="confirmVideochatDialog = true"
@@ -47,51 +37,75 @@
         class="sm-low"
         icon
       >
-        <v-icon>settings</v-icon>
+        <font-awesome-icon
+          :icon="['fas', 'ellipsis-v']"
+          @click.prevent=""
+        />
       </v-btn>
     </v-toolbar>
-    <v-sheet
-      tag="div"
-      class="mt-2 overflow-y-auto pa-2 scrolling-messages_container"
-      style="max-height: 77.5vh; min-height: 77.5vh;"
+    <v-row
+      justify="center"
+      class="pl-small"
     >
-      <div
-        id="messages-container"
-        style="display: flex; flex-direction: column; justify-content: flex-end;"
+      <v-sheet
+        tag="div"
+        class="mt-2 pa-2 scrolling-messages_container"
+        :height="messagesContainerHeight"
+        @scroll="scrollMess"
       >
-        <OneDiscussionsMessage
-          v-for="(item, mesid) in messagesArr"
-          :key="mesid"
-          :interlocutor="params.id"
-          :id="'message' + item"
-        />
-      </div>
-    </v-sheet>
+        <div
+          id="messages-container"
+          class="messages_block"
+        >
+          <!--         bounce zoomInUp fadeIn-->
+          <transition-group
+            name="slide"
+            enter-active-class="animated"
+          >
+            <OneDiscussionsMessage
+              v-for="(message, mesid) in messagesArr"
+              :key="(mesid + 0)"
+              :message="message"
+              :interlocutor="params.id"
+              draggable="true"
+            />
+          </transition-group>
+        </div>
+      </v-sheet>
+    </v-row>
     <v-footer
-      absolute
+      id="messages_footer"
       color="white"
-      elevation="7"
+      elevation="5"
     >
-      <v-text-field
-        label="Your message"
-        outlined
-        hide-details
-      ></v-text-field>
-      <v-btn
-        icon
-        large
-        color="blue darken-2"
-        class="ml-1 pl-1"
+      <v-row
+        justify="center"
+        align="center"
       >
-        <v-icon>send</v-icon>
-      </v-btn>
+        <v-textarea
+          label="Your message"
+          outlined
+          :rows="countTextareaRows"
+          no-resize
+          hide-details
+        ></v-textarea>
+        <v-btn
+          icon
+          large
+          color="blue darken-2"
+          class="ml-1 pl-1"
+          @click="sendNewMessage"
+        >
+          <v-icon>send</v-icon>
+        </v-btn>
+      </v-row>
     </v-footer>
     <v-dialog
       v-model="confirmVideochatDialog"
       width="290"
     >
-      <v-card dark>
-        <v-card-title><v-toolbar-title>Call to {{ params.id }}?</v-toolbar-title></v-card-title>
+      <v-card>
+        <v-card-title><v-toolbar-title>New call</v-toolbar-title></v-card-title>
         <v-card-text>
           <div class="mb-2">
             Are you really want to start private videochat with {{ params.id }}?
@@ -124,7 +138,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -141,38 +155,49 @@ export default {
   }),
   data() {
     return {
+      freeBlockHeight: '',
+      messagesContainerHeight: '',
       uniqueId,
       openVideoNewTab: true,
       confirmVideochatDialog: false,
-      messageNum: '',
-      intervalFunc: null,
       messagesArr: [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-        31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+        1, 2,// 3, 4, 5, 6, 7, 8, 9, 10, 3, 4, 5, 6, 7, 8, 9, 10,
       ],
     };
   },
   computed: {
-    foundMessages() {
-      return `${this.messagesArr.some(m => m === this.messageNum).length} messages available` || 'no results';
+    countTextareaRows() {
+      return this.$vuetify.breakpoint.smAndDown ? 2 : 4;
     },
   },
   mounted() {
+    this.onScreenResize();
     this.$vuetify.goTo(document.getElementById('messages-container').offsetHeight + 1000, {
       container: ".scrolling-messages_container",
       duration: 0,
     });
-    // this.intervalFunc = setInterval(() => {
-    //   if (document.getElementById('messages-container').offsetHeight) {
-    //     this.messagesArr.push(this.messagesArr.length);
-    //     this.$vuetify.goTo(document.getElementById('messages-container').offsetHeight + 1000, {
-    //       container: ".scrolling-messages_container",
-    //       duration: 0,
-    //     });
-    //   } else {
-    //     clearInterval(this.intervalFunc);
-    //   }
-    // }, 2000);
+  },
+  methods: {
+    onScreenResize() {
+      const toolbar = document.getElementById('messages_toolbar');
+      const footer = document.getElementById('messages_footer');
+      const freeHeight = this.$vuetify.breakpoint.mdAndUp ? 73 : 65;
+      this.messagesContainerHeight =
+        ((window.innerHeight - toolbar.offsetHeight) - footer.offsetHeight) - freeHeight;
+      // console.log({ x: window.innerWidth, y: window.innerHeight });
+    },
+    sendNewMessage() {
+      this.messagesArr.push(this.messagesArr.length + 1);
+      this.$vuetify.goTo(document.getElementById('messages-container').offsetHeight, {
+        container: ".scrolling-messages_container",
+        duration: 300,
+      });
+    },
+    scrollMess() {
+      // console.log( 'Текущая прокрутка сверху: ' + document.getElementById('messages-container').offsetHeight);
+
+      // console.log( 'Текущая прокрутка сверху: ' + document.getElementById('messages-container').pageYOffset);
+    },
   },
 };
 </script>
@@ -180,24 +205,47 @@ export default {
 <style
   lang="stylus"
   scoped>
+  .messages_block
+    display: flex
+    flex-direction: column
+    justify-content: flex-end
+    align-items: center
+    padding-top 10px
+    /*height: 100%*/
+  .scrolling-messages_container
+    max-width: 1200px
+    overflow-y auto
+    overflow-x: hidden
+    display: flex
+    flex-direction: column-reverse
+
+
   .scrolling-messages_container::-webkit-scrollbar
     display: block
-    max-width: 10px
+    max-width: 9px
   .scrolling-messages_container::-webkit-scrollbar-thumb
-    background-color: dodgerblue
-    -webkit-border-radius: 25px
-    -moz-border-radius: 25px
-    border-radius: 25px
+    background: #fff
   .scrolling-messages_container::-webkit-scrollbar-track-piece
-    background-color: #d1eaff
+    background-color: #fff
   .scrolling-messages_container::-webkit-scrollbar-button
-    background-color: cornflowerblue
-    height: 2px
-    display: none
+    background-color: #fff
+    height: 1px
+  .scrolling-messages_container:hover::-webkit-scrollbar-thumb
+    background-color: #c8c8c8
+  .scrolling-messages_container:hover::-webkit-scrollbar-track-piece
+    background-color: #ebebeb
+  .scrolling-messages_container:hover::-webkit-scrollbar-button
+    background-color: #c8c8c8
+
 
   .sm-low {
     margin-right: 10px!important;
   }
+@media (max-width: 1215px) {
+  .pl-small {
+    padding-left: 8px
+  }
+}
 @media (max-width: 900px) {
   .sm-break {
     display: none
