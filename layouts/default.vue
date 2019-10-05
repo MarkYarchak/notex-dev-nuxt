@@ -18,7 +18,7 @@
                 link
                 two-line
                 :to="`/profile/markyarchak`"
-                color="orange"
+                color="orange darken-1"
               >
                 <v-list-item-avatar size="60">
                   <v-img src="https://source.unsplash.com/random/2"></v-img>
@@ -44,7 +44,7 @@
               :to="item.to"
               router
               exact
-              color="orange"
+              color="orange darken-1"
             >
               <v-list-item-action>
 <!--                <span v-if="item.title === 'People'">-->
@@ -60,10 +60,11 @@
         </v-navigation-drawer>
 
         <v-app-bar
-          color="orange darken-3"
+          color="deep-orange"
           dark
           clipped-left
           fixed
+          :flat="!drawer"
           app
         >
           <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -200,6 +201,9 @@ export default {
     bottomMenu() {
       return this.$store.state.appSettings.isBottomMenu;
     },
+  },
+  mounted() {
+    console.log("%cDanger zone. It is only for developers!", "color: yellow; background-color: red;padding: 4px; font-size: 30px; font-weight: bold");
   },
   methods: {
     startMainSearch() {

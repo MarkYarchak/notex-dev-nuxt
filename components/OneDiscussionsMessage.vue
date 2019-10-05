@@ -7,7 +7,7 @@
     <div class="one_message_header">
       {{ interlocutor }}
     </div>
-    <div class="one_message_content black--text">
+    <div class="one_message_content">
       {{ message }}Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae cupiditate deleniti dolorem doloremque ipsum magni mollitia optio possimus, qui repellendus. Autem earum facere molestiae perferendis provident repellendus reprehenderit ut! Vero.
     </div>
     <div class="one_message_footer">
@@ -87,9 +87,10 @@ export default {
   .one_message_header
     font-size: 16px
     display: flex
-    color dodgerblue
+    color #363c47
     font-weight: bold
   .one_message_content
+    font-size: 15px
     // font-family: 'Roboto', sans-serif;
     // font-family: 'Lato', sans-serif;
     // font-family: 'Roboto Condensed', sans-serif;

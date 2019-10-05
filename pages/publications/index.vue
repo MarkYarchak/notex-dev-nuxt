@@ -4,11 +4,19 @@
     align-center
     wrap
   >
-    <OnePostCard
-      v-for="(user, uid) in users"
-      :key="uid"
-      :user="user"
-    />
+<!--    <v-lazy-->
+<!--      v-model="isActive"-->
+<!--      :options="{-->
+<!--          threshold: .5-->
+<!--        }"-->
+<!--      transition="fade-transition"-->
+<!--    >-->
+      <OnePostCard
+        v-for="(user, uid) in users"
+        :key="uid"
+        :user="user"
+      />
+<!--    </v-lazy>-->
   </v-layout>
 </template>
 
@@ -39,6 +47,11 @@ export default {
         fullName
       }
     }`,
+  },
+  data() {
+    return {
+      isActive: false,
+    };
   },
 }
 </script>
