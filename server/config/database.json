@@ -1,4 +1,5 @@
 {
   "database": "mongodb://localhost:27017/coursework_data",
-  "secret": "d4sss6hGgWTEWWt4545HTEht65j5j5deshF43gGhehtrj7HRy5kurthit544g46rnjkINIOgweGE43Ggwgwe54gres54yt65e7jdtkTH56yjtf"
+  "secret": "d4sss6hGgWTEWWt4545HTEht65j5j5deshF43gGhehtrj7HRy5kurthit544g46rnjkINIOgweGE43Ggwgwe54gres54yt65e7jdtkTH56yjtf",
+  "emailVerify": "secret_email_verify_code-ai2ufw3ei45uf7uia2eog5bi3va354eir8hi"
 }

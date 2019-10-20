@@ -54,6 +54,7 @@
 <script>
 export default {
   name: "index",
+  layout: 'account',
   data() {
     return {
       isBottomMenu: this.$store.state.appSettings.isBottomMenu,

@@ -1,167 +1,144 @@
 <template>
   <v-card
-    :width="$vuetify.breakpoint.mdAndUp ? 700 : $vuetify.breakpoint.smOnly ? 620 : ''"
-    class="mb-3 ml-1 mr-1"
+    :width="postCardWidth"
+    max-width="500"
+    class="mb-3"
+    v-resize="onScreenResize"
   >
-    <v-window v-model="postWindowPosition">
-      <v-window-item :value="2">
-        <v-toolbar elevation="0" style="padding: 15px 5px 20px 5px;">
-          <v-avatar size="64">
+    <template v-if="!loading">
+      <v-card-title>
+        <v-row align="center" class="pl-1">
+          <v-avatar size="55">
             <v-img src="https://source.unsplash.com/random"></v-img>
           </v-avatar>
-          <v-toolbar-title>
-            <span class="title-username-font">{{ user.username }}</span>
-          </v-toolbar-title>
+          <span class="title-username-font">{{ user.username }}</span>
           <v-spacer></v-spacer>
-          <v-subheader>
-            {{ moment(moment().format()).fromNow() }}
+          <v-subheader v-if="mdAndUp">
+            {{ moment(moment().format()).fromNow($vuetify.breakpoint.smAndDown || undefined) }}
           </v-subheader>
-        </v-toolbar>
+          <v-btn
+            class="sm-low"
+            icon
+          >
+            <font-awesome-icon
+              :icon="['fas', 'ellipsis-v']"
+              @click.prevent=""
+            />
+          </v-btn>
+        </v-row>
+      </v-card-title>
+      <div class="pt-1">
         <v-img
           src="https://source.unsplash.com/random"
           :lazy-src="require('../static/icon.png')"
           aspect-ratio="1"
-          max-height="368"
           contain
+          max-height="400"
           @load="onLoadImage"
         ></v-img>
-        <v-card-title>
-          {{ user.fullName }}
-        </v-card-title>
-        <v-card-text>
-          <div style="display: flex; flex-direction: column;">
-            <div>
-              <strong>User id:</strong> {{ user.id }}
-            </div>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+        <!--      <v-card-title>-->
+        <!--        {{ user.fullName }}-->
+        <!--      </v-card-title>-->
+        <!--      <v-card-text>-->
+        <!--        <div style="display: flex; flex-direction: column;">-->
+        <!--          <div>-->
+        <!--            <strong>User id:</strong> {{ user.id }}-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <!--      </v-card-text>-->
+      </div>
+      <v-card-actions>
+        <v-layout class="pt-1">
           <v-btn
-            dark
+            text
+            rounded
+            large
             color="red"
           >
             <font-awesome-icon :icon="['fas', 'heart']" class="fa-lg" />
+            <span class="ml-1">538</span>
           </v-btn>
-          <v-spacer></v-spacer>
+<!--          <v-btn-->
+<!--            text-->
+<!--            rounded-->
+<!--            large-->
+<!--            color="red"-->
+<!--          >-->
+<!--            <font-awesome-icon :icon="['fas', 'thumbs-up']" class="fa-lg" />-->
+<!--            <span class="ml-1">538</span>-->
+<!--          </v-btn>-->
+<!--          <v-btn-->
+<!--            text-->
+<!--            rounded-->
+<!--            large-->
+<!--          >-->
+<!--            &lt;!&ndash;          color="red"&ndash;&gt;-->
+<!--            <font-awesome-icon :icon="['fas', 'thumbs-down']" class="fa-lg" />-->
+<!--            <span class="ml-1">48</span>-->
+<!--          </v-btn>-->
           <v-btn
-            dark
-            :x-large="$vuetify.breakpoint.mdAndUp"
-            :large="$vuetify.breakpoint.smAndDown"
+            large
+            rounded
+            text
             color="blue"
-            @click="postWindowPosition = 3"
+            @click="openComments"
           >
             <font-awesome-icon :icon="['fas', 'comments']" />
+            <span class="ml-1">74</span>
           </v-btn>
-        </v-card-actions>
-      </v-window-item>
-
-      <v-window-item :value="3">
-        <v-toolbar elevation="0">
-          <v-toolbar-items>
-            <v-btn
-              text
-              color="orange darken-2"
-              @click="postWindowPosition = 2"
-            >
-              <font-awesome-icon :icon="['fas', 'arrow-left']" class="fa-lg" />
-            </v-btn>
-
-          </v-toolbar-items>
           <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn
-              dark
-              color="blue darken-3"
-              @click="fullScreenComments = true"
-            >
-              Full screen
-            </v-btn>
-          </v-toolbar-items>
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn
-              dark
-              color="blue darken-3"
-              @click="fullScreenComments = true"
-            >
-              Full screen
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-card-text>
-          <v-sheet
-            class="overflow-y-auto sheet-scroll"
-            max-height="410"
-          >
-            <v-container style="height: 1500px;">
-
-            </v-container>
-          </v-sheet>
-        </v-card-text>
-        <v-card-actions>
-          <v-text-field
-            label="Leave comment..."
-            class="pr-2 pl-1"
-          ></v-text-field>
           <v-btn
-            dark
-            color="green"
-            @click="postWindowPosition = 2"
+            text
+            rounded
+            large
+            color="black"
+            @click=""
           >
-            Send
+            <font-awesome-icon :icon="['fas', 'bullhorn']" />
+            <span class="ml-1">21</span>
           </v-btn>
-        </v-card-actions>
-      </v-window-item>
-    </v-window>
-    <v-dialog
-      v-model="fullScreenComments"
-      fullscreen
-    >
+          <v-btn
+            text
+            icon
+            rounded
+            large
+            color="black"
+            @click=""
+          >
+            <v-icon>expand_more</v-icon>
+            <!--          <span class="ml-1">173 w</span>-->
+          </v-btn>
+        </v-layout>
+      </v-card-actions>
+    </template>
+    <template v-if="loading">
       <v-card>
-        <v-toolbar elevation="0">
-          <v-toolbar-items>
-            <v-btn
-              text
-              color="orange darken-2"
-            >
-              <font-awesome-icon :icon="['fas', 'arrow-left']" class="fa-lg" />
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              dark
-              color="blue darken-3"
-              @click="fullScreenComments = false"
-            >
-              Small screen
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-card-text>
-          <v-sheet
-            class="overflow-y-auto sheet-scroll"
-            max-height="420"
-          >
-            <v-container style="height: 1500px;">
-
-            </v-container>
-          </v-sheet>
-        </v-card-text>
-        <v-card-actions>
-          <v-text-field
-            label="Leave comment..."
-            class="pr-2 pl-1"
-          ></v-text-field>
-          <v-btn
-            dark
-            color="green"
-            @click="postWindowPosition = 2"
-          >
-            Send
-          </v-btn>
-        </v-card-actions>
+        <v-skeleton-loader
+          class="mx-auto"
+          tile
+          :transition="transition"
+          type="card"
+        ></v-skeleton-loader>
+        <v-skeleton-loader
+          class="mx-auto mb-3"
+          boilerplate
+          :transition="transition"
+          type="list-item-two-line"
+        ></v-skeleton-loader>
       </v-card>
-    </v-dialog>
+    </template>
+<!--    <v-btn-->
+<!--      fixed-->
+<!--      bottom-->
+<!--      right-->
+<!--      rounded-->
+<!--      dark-->
+<!--      x-large-->
+<!--      color="deep-orange darken-1"-->
+<!--      @click="loading = !loading"-->
+<!--    >-->
+<!--      Load-->
+<!--    </v-btn>-->
   </v-card>
 </template>
 
@@ -171,6 +148,10 @@ import moment from 'moment';
 export default {
   name: 'OnePostCard',
   props: {
+    post: {
+      type: Object,
+      default: () => ({}),
+    },
     user: {
       type: Object,
       default: () => {},
@@ -179,12 +160,45 @@ export default {
   apollo: {},
   data: () => ({
     moment,
-    postWindowPosition: 2,
-    fullScreenComments: false,
+    loading: true,
+    transition: 'scale-transition',
+    postCardWidth: 0,
+    transitions: [
+      {
+        text: 'None',
+        value: undefined,
+      },
+      {
+        text: 'Fade Transition',
+        value: 'fade-transition',
+      },
+      {
+        text: 'Scale Transition',
+        value: 'scale-transition',
+      },
+    ],
   }),
+  mounted() {
+    this.loading = false;
+  },
+  computed: {
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
+    },
+    cardWidth() {
+      return this.$vuetify.breakpoint.mdAndUp ? 700 : this.$vuetify.breakpoint.smOnly ? 620 : '';
+    },
+  },
   methods: {
+    openComments() {
+      this.$emit('set-post-comments', this.post.comments);
+    },
     onLoadImage(data) {
-      // console.log(data)
+      this.loading = false;
+    },
+    onScreenResize() {
+      const clientWidth = window.innerWidth;
+      this.postCardWidth = this.$vuetify.breakpoint.smAndDown ? clientWidth : 580;
     },
   },
 };
@@ -193,12 +207,14 @@ export default {
 <style
   lang="stylus"
   scoped>
-  @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Dosis&display=swap');
 
   .title-username-font
+    margin-left: 12px
     color: #525252
-    margin-left: 20px
-    font-family: 'Raleway', sans-serif;
+    font-size: 16px
+    font-weight: bold
+    font-family: 'Dosis', sans-serif;
   .sheet-scroll::-webkit-scrollbar
     /*display: none*/
 </style>

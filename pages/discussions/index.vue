@@ -279,6 +279,7 @@ import CardCreateNewDiscussion from '../../components/CardCreateNewDiscussion';
 
 export default {
   name: "index",
+  layout: 'account',
   components: {
     CardCreateNewDiscussion,
   },

@@ -8,6 +8,7 @@ import { nothingUseful } from './study.ts';
 
 export default {
   name: "index",
+  layout: 'account',
   mounted() {
     console.log(indexon);
     console.info(nothingUseful);

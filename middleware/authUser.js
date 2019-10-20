@@ -1,13 +1,8 @@
-const { fullHttpUrl } = require('../nuxtClientConfig');
+const { gqlHttpUrl } = require('../nuxtServerConfig');
 
-export default async ({ redirect, route, $axios }) => {
-  try {
-    const response = await $axios.post(fullHttpUrl, {
-      query: `{ profileUser (username: ${route.params.username}) { id, username, fullName } }`,
-    });
-    if (!response.data.data) return redirect('/login');
-  } catch (e) {
-    console.log(e);
-  }
-
+export default async ({ redirect, $axios }) => {
+  return await $axios.post(gqlHttpUrl, {
+    // need to get token data from apollo persist storage or from vuex server
+    query: `{ checkUserLoginStatus (token: ${123}) { id, username, fullName } }`,
+  }).catch(() => redirect('/login'));
 };

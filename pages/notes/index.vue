@@ -6,7 +6,8 @@
 
 <script>
 export default {
-  name: "index"
+  name: "index",
+  layout: 'account',
 };
 </script>
 

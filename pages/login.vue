@@ -2,8 +2,12 @@
   <v-layout
     text-center
     wrap
+    :style="`max-height: ${imageContainerHeight}px; min-height: ${imageContainerHeight}px`"
+    v-resize="onPageResize"
   >
-    <div class="image-background-block">
+    <div
+      class="image-background-block"
+    >
       <div class="login-container">
         <div class="login-form">
           <v-form @submit.prevent="loginByUser">
@@ -11,7 +15,7 @@
               width="310"
               class="pt-1"
             >
-              <v-card-title>Login</v-card-title>
+              <v-card-title>Login as worker</v-card-title>
               <v-card-text class="pt-3">
                 <v-text-field
                   v-model="username"
@@ -57,12 +61,22 @@ export default {
     return {
       username: '',
       password: '',
+      imageContainerHeight: '',
     };
   },
+  mounted() {
+    this.onPageResize();
+  },
   methods: {
+    onPageResize() {
+      const loginToolbar = document.getElementById('login-toolbar');
+      console.log(loginToolbar.offsetHeight);
+      console.log(document.body.clientHeight);
+      this.imageContainerHeight = window.innerHeight - loginToolbar.offsetHeight;
+    },
     loginByUser() {
       this.$axios.post(gqlHttpUrl, {
-        query: `{ userLogin (username: "${this.username}", password: "${this.password}") { id, username, fullName, email } }`,
+        query: `{ userLogin (username: "${this.username}", password: "${this.password}") }`,
       })
         .then((data) => {
           const userData = data.data.data.userLogin;
@@ -82,11 +96,11 @@ export default {
   scoped>
   .image-background-block {
     width: 100%;
+    height: 100%
     display: flex;
     align-items: center;
     justify-content: center
-    background: center center/cover no-repeat url("https://hdwallpaperim.com/wp-content/uploads/2017/08/22/226108-space_art-landscape-shapes-digital_art-night-lights-artwork.jpg") #4fabff;
-    height: 93.4vh;
+    background: center center/cover no-repeat url("../static/abstractalbum/143429_original_3840x2934.jpg") #4fabff;
   }
   .login-container {
     display: flex;

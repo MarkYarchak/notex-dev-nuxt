@@ -1,10 +1,15 @@
 <template>
-  <div></div>
+  <MainPage />
 </template>
 
 <script>
+import MainPage from '../components/MainPage';
+
 export default {
-  name: "index"
+  name: "index",
+  components: {
+    MainPage,
+  },
 };
 </script>
 

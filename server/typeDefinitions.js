@@ -3,7 +3,10 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
 
   type Query {
-    userLogin (username: String!, password: String!): User!
+    userLogin (username: String!, password: String!): String!
+    checkUserLoginStatus (token: String!): Boolean!
+    sendRecoveryEmail (email: String!): String!
+    verifyRecoveryLink (paramsId: String!, queryParametersToken: String!): Boolean!
     users: [User!]!
     profileUser (username: String!): User!
   }
@@ -12,6 +15,9 @@ const typeDefs = gql`
     createUser(username: String!, email: String!, fullName: String!, password: String!): User!
     updateUser(id: String!, username: String, email: String, fullName: String, password: String!): User!
     deleteUser(id: String!, password: String!): User!
+    passwordRecovery (urlToken: String! password: String!): String!
+    addCollaborator(id: String!, collaboratorId: String!): Boolean!
+    removeCollaborator(id: String!): Boolean!
   }
   
   type Subscription {
@@ -24,6 +30,7 @@ const typeDefs = gql`
       email: String!
       fullName: String!
       avatar: String!
+      token: String!
       collaborators: [User!]
       notes: [Note!]
       discussions: [Dialog]
